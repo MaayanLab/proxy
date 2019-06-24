@@ -1,0 +1,33 @@
+version: '3'
+services:
+  proxy:
+    build: .
+    image: maayanlab/proxy:1.0.5
+    environment:
+      # the anticipated name of the server host
+      nginx_server_name: localhost
+
+      # SSL (when ssl is enabled, http is forwarded to ssl)
+      # nginx_ssl: 1
+      # certs in pem format
+      # nginx_ssl_key: (replaces ; with \n)
+      # nginx_ssl_crt: (replaces ; with \n)
+      # or provide them in directory:
+      # nginx_ssl_root: /ssl/directory/
+      #  tls.key, tls.crt
+
+      # proxy_pass rules
+      nginx_proxy_00: "/basepath http://backendsever:8080/"
+      nginx_proxy_01: "/ https://backendfallback/"
+      # nginx_proxy_xxx: ...
+
+      # rewrite rules (302)
+      nginx_redirect_00: "/redirectpath http://new/loc"
+      nginx_redirect_01: "/redirect/expr/(.*) http://new/loc/$1"
+      # nginx_redirect_xxx: ...
+  
+      # add compression
+      # nginx_gzip: 1
+    ports:
+      - 80:80
+      - 443:443
