@@ -88,8 +88,8 @@ cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
     listen          443 ssl;
     server_name     ${nginx_server_name};
 
-    ssl_tlsificate ${nginx_ssl_root}/tls.crt;
-    ssl_tlsificate_key ${nginx_ssl_root}/tls.key;
+    ssl_certificate ${nginx_ssl_root}/tls.crt;
+    ssl_certificate_key ${nginx_ssl_root}/tls.key;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_prefer_server_ciphers on;
     ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
