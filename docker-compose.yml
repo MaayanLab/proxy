@@ -2,7 +2,7 @@ version: '3'
 services:
   proxy:
     build: .
-    image: maayanlab/proxy:1.0.5
+    image: maayanlab/proxy:1.0.6
     environment:
       # the anticipated name of the server host
       - nginx_server_name=localhost
@@ -28,6 +28,10 @@ services:
   
       # add compression
       # - nginx_gzip=1
+
+      # # configure ports
+      # - nginx_http_port=5080
+      # - nginx_https_port=5443
     ports:
       - 80:80
       - 443:443

@@ -6,6 +6,14 @@ if [ -z "${nginx_server_name}" ]; then
   export nginx_server_name="localhost"
 fi
 
+if [ -z "${nginx_http_port}" ]; then
+  export nginx_http_port="80"
+fi
+
+if [ -z "${nginx_https_port}" ]; then
+  export nginx_https_port="443"
+fi
+
 if [ -z "${nginx_ssl}" ]; then
   export nginx_ssl="0"
 elif [ "${nginx_ssl}" -eq "1" ]; then
@@ -79,13 +87,13 @@ if [ "${nginx_ssl}" -eq "1" ]; then
 
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
   server {
-    listen          80;
+    listen          ${nginx_http_port};
     server_name     ${nginx_server_name};
     rewrite ^/(.*)  https://\$host/\$1 permanent;
   }
 
   server {
-    listen          443 ssl;
+    listen          ${nginx_https_port} ssl;
     server_name     ${nginx_server_name};
 
     ssl_certificate ${nginx_ssl_root}/tls.crt;
@@ -100,7 +108,7 @@ else
 
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
   server {
-    listen          80;
+    listen          ${nginx_http_port};
     server_name     ${nginx_server_name};
 
 EOF
