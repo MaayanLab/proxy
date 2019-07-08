@@ -14,6 +14,10 @@ if [ -z "${nginx_https_port}" ]; then
   export nginx_https_port="443"
 fi
 
+if [ -z "${nginx_timeout}" ]; then
+  export nginx_timeout="60"
+fi
+
 if [ -z "${nginx_ssl}" ]; then
   export nginx_ssl="0"
 elif [ "${nginx_ssl}" -eq "1" ]; then
@@ -150,6 +154,11 @@ cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
       proxy_set_header   X-Real-IP \$remote_addr;
       proxy_set_header   X-Forwarded-For \$proxy_add_x_forwarded_for;
       proxy_set_header   X-Forwarded-Host \$server_name;
+
+      proxy_connect_timeout ${nginx_timeout};
+      proxy_send_timeout    ${nginx_timeout};
+      proxy_read_timeout    ${nginx_timeout};
+      send_timeout          ${nginx_timeout};
     }
 EOF
 
