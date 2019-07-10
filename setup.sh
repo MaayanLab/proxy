@@ -151,9 +151,14 @@ env | sort | grep "^nginx_proxy_" | while IFS="=" read key val; do
 
 IFS=" " read path pass <<< "${val}"
 
+uri_front="$(echo ${pass} | cut -d/ -f1-3)"
+uri_back="/$(echo ${pass} | cut -d/ -f4-)"
+
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
-    location ${path} {
-      proxy_pass         ${pass};
+    location ~ ^${path}$ {
+      rewrite ^${path}$ ${uri_back} break;
+
+      proxy_pass         ${uri_front};
       proxy_set_header   Host \$host;
       proxy_set_header   X-Real-IP \$remote_addr;
       proxy_set_header   X-Forwarded-For \$proxy_add_x_forwarded_for;

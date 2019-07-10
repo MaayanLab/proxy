@@ -2,7 +2,7 @@ version: '3'
 services:
   proxy:
     build: .
-    image: maayanlab/proxy:1.0.8
+    image: maayanlab/proxy:1.1.0
     environment:
       # the anticipated name of the server host
       - nginx_server_name=localhost
@@ -18,7 +18,7 @@ services:
 
       # proxy_pass rules
       - nginx_proxy_00='/basepath http://backendsever:8080/'
-      - nginx_proxy_01='/ https://backendfallback/'
+      - nginx_proxy_01='/(.*) https://backendfallback/$1'
       # nginx_proxy_xxx: ...
 
       # rewrite rules (302)
