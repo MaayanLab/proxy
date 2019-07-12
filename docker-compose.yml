@@ -17,13 +17,13 @@ services:
       #  tls.key, tls.crt
 
       # proxy_pass rules
-      - nginx_proxy_00='/basepath http://backendsever:8080/'
-      - nginx_proxy_01='/(.*) https://backendfallback/$1'
+      - nginx_proxy_00=/basepath http://backendsever:8080/
+      - nginx_proxy_01=/(.*) https://backendfallback/$$1
       # nginx_proxy_xxx: ...
 
       # rewrite rules (302)
-      - nginx_redirect_00='/redirectpath http://new/loc'
-      - nginx_redirect_01='/redirect/expr/(.*) http://new/loc/$$1'
+      - nginx_redirect_00=/redirectpath http://new/loc
+      - nginx_redirect_01=/redirect/expr/(.*) http://new/loc/$$1
       # nginx_redirect_xxx: ...
   
       # add compression
