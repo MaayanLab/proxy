@@ -44,6 +44,10 @@ elif [ "${nginx_ssl}" -eq "1" ]; then
   fi
 fi
 
+if [ -z "${nginx_ssl_redirect}" ]; then
+  export nginx_ssl_redirect="${nginx_ssl}"
+fi
+
 if [ -z "${nginx_gzip}" ]; then
   export nginx_gzip="1"
 fi
@@ -91,9 +95,10 @@ EOF
 
 fi
 
-if [ "${nginx_ssl}" -eq "1" ]; then
+if [ "${nginx_ssl_redirect}" -eq "1" ]; then
 
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
+
   server {
     listen          ${nginx_http_port};
     server_name     ${nginx_server_name};
@@ -101,23 +106,30 @@ cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
   }
 
   server {
-    listen          ${nginx_https_port} ssl;
     server_name     ${nginx_server_name};
+EOF
+
+else
+
+cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
+
+  server {
+    listen          ${nginx_http_port};
+    server_name     ${nginx_server_name};
+EOF
+
+fi
+
+if [ "${nginx_ssl}" -eq "1" ]; then
+
+cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
+    listen          ${nginx_https_port} ssl;
 
     ssl_certificate ${nginx_ssl_root}/tls.crt;
     ssl_certificate_key ${nginx_ssl_root}/tls.key;
     ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
     ssl_prefer_server_ciphers on;
     ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
-
-EOF
-
-else
-
-cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
-  server {
-    listen          ${nginx_http_port};
-    server_name     ${nginx_server_name};
 
 EOF
 
