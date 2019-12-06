@@ -169,7 +169,7 @@ EOF
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
     location ~ ^${path}$ {
       default_type text/html;
-      alias /etc/nginx/html/${key}.html;
+      try_files /${key}.html =404;
     }
 EOF
 
