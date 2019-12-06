@@ -2,7 +2,7 @@ version: '3'
 services:
   proxy:
     build: .
-    image: maayanlab/proxy:1.1.0
+    image: maayanlab/proxy:1.1.1
     environment:
       # the anticipated name of the server host
       - nginx_server_name=localhost
@@ -16,6 +16,9 @@ services:
       # - nginx_ssl_root=/ssl/directory/
       #  tls.key, tls.crt
 
+      # disable automatic redirecting http => https
+      # - nginx_ssl_redirect=0
+  
       # proxy_pass rules
       - nginx_proxy_00=/basepath http://backendsever:8080/
       - nginx_proxy_01=/(.*) https://backendfallback/$$1
@@ -25,6 +28,9 @@ services:
       - nginx_redirect_00=/redirectpath http://new/loc
       - nginx_redirect_01=/redirect/expr/(.*) http://new/loc/$$1
       # nginx_redirect_xxx: ...
+
+      # html redirect (for annoying situations -- return 200 but redirect w/ javascript)
+      # - nginx_html_redirect_xx=/redirectpath/(.*) http://new/loc/$$1
   
       # add compression
       # - nginx_gzip=1
