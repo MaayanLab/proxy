@@ -28,7 +28,7 @@ elif [ "${nginx_ssl}" -eq "1" ]; then
     fi
   fi
 
-  if [ ! -z "${nginx_ssl_crt}" -a ! -z "${nginx_ssl_crt}" ]; then
+  if [ ! -z "${nginx_ssl_crt}" -a ! -z "${nginx_ssl_key}" ]; then
     export nginx_ssl_root=/ssl
     mkdir -p "${nginx_ssl_root}"
     echo "${nginx_ssl_crt}" | sed -e 's/;/\n/g' | tee "${nginx_ssl_root}/tls.crt"
