@@ -144,6 +144,37 @@ cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
 
 EOF
 
+# Setup http redirect config
+env | sort | grep "^nginx_html_redirect_" | while IFS="=" read key val; do
+
+IFS=" " read path pass <<< "${val}"
+
+mkdir -p /etc/nginx/html/
+touch "/etc/nginx/html/${key}.html"
+
+cat << EOF | tee "/etc/nginx/html/${key}.html" >> $log
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>HTML Meta Tag</title>
+   </head>
+   <body>
+      <p>This page has moved, you will be redirected momentarily.</p>
+      <script>
+        window.location.href = (window.location.pathname+'').replace(new RegExp("^${path}\$"), "${pass}");</script>
+   </body>
+</html>
+EOF
+
+cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
+    location ~ ^${path}$ {
+      default_type text/html;
+      alias /etc/nginx/html/${key}.html;
+    }
+EOF
+
+done
+
 # Setup redirect configs
 env | sort | grep "^nginx_redirect_" | while IFS="=" read key val; do
 
