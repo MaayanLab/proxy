@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-log=/error.log
+log=/log.fifo
 
 if [ -z "${nginx_server_name}" ]; then
   export nginx_server_name="localhost"
@@ -229,6 +229,6 @@ if [ -f $log ]; then
   rm $log
 fi
 
-touch $log
+mkfifo $log
 tail -f $log &
 setup && exec "$@"
