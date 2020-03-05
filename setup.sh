@@ -52,6 +52,10 @@ if [ -z "${nginx_gzip}" ]; then
   export nginx_gzip="1"
 fi
 
+uri_parse() {
+  sed 's/^\(https\{0,1\}:\/\/\)\([^:/$]\{1,\}\)\(:[0-9]\{1,\}\)\/\{0,1\}\(.*\)$/\1\2\3 \/\4/'
+}
+
 setup() {
 
 # Setup base config
@@ -194,8 +198,7 @@ env | sort | grep "^nginx_proxy_" | while IFS="=" read key val; do
 
 IFS=" " read path pass <<< "${val}"
 
-uri_front="$(echo ${pass} | cut -d/ -f1-3)"
-uri_back="/$(echo ${pass} | cut -d/ -f4-)"
+echo ${pass} | uri_parse | while IFS=" " read uri_front uri_back; do
 
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
     location ~ ^${path}$ {
@@ -213,6 +216,8 @@ cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
       send_timeout          ${nginx_timeout};
     }
 EOF
+
+done
 
 done
 
