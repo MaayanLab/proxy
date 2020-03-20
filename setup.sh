@@ -184,12 +184,25 @@ env | sort | grep "^nginx_redirect_" | while IFS="=" read key val; do
 
 IFS=" " read path pass <<< "${val}"
 
+echo ${pass} | grep -q '^/'
+if [ "$?" -eq "0" ]; then
+
+cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
+    location ~ ^${path}$ {
+      rewrite ^${path}$ ${pass};
+    }
+EOF
+
+else
+
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
     location ~ ^${path}$ {
       rewrite ^${path}$ ${pass};
       return 302;
     }
 EOF
+
+fi
 
 done
 

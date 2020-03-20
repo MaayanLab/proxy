@@ -2,7 +2,7 @@ version: '3'
 services:
   proxy:
     build: .
-    image: maayanlab/proxy:1.1.4
+    image: maayanlab/proxy:1.1.5
     environment:
       # the anticipated name of the server host
       - nginx_server_name=localhost
