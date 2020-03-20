@@ -1,0 +1,25 @@
+version: '3'
+services:
+  proxy:
+    build: ..
+    image: maayanlab/proxy:test
+    environment:
+      - nginx_server_name=localhost
+      - nginx_proxy_00=/01/02(/.*) http://test02$$1
+      - nginx_proxy_01=/02/03(/.*) http://test01/03$$1
+      - nginx_proxy_02=/01(/.*) http://test01:80$$1
+      - nginx_proxy_03=/02(/.*) http://test02$$1
+      - nginx_proxy_04=(/.*) http://test02$$1
+      - nginx_redirect_00=/01 /01/
+      - nginx_redirect_01=/02 http://localhost:10080/02/
+      - nginx_redirect_02=/01/02/03(/.*) /01$$1
+    ports:
+      - 10080:80
+  test01:
+    image: nginx
+    volumes:
+      - ./html/01:/usr/share/nginx/html/
+  test02:
+    image: nginx
+    volumes:
+      - ./html/02:/usr/share/nginx/html/

@@ -31,3 +31,9 @@ services:
 ```
 
 We can expose our multi-container application at one place with the help of this proxy.
+
+## Testing
+To run the tests execute:
+```sh
+sh test.sh
+```
