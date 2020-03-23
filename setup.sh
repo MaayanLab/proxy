@@ -52,6 +52,10 @@ if [ -z "${nginx_gzip}" ]; then
   export nginx_gzip="1"
 fi
 
+if [ -z "${nginx_buffering}" ]; then
+  export nginx_buffering="1"
+fi
+
 uri_parse() {
   sed 's/^\(https\{0,1\}:\/\/\)\([^:/$]\{1,\}\)\(:[0-9]\{1,\}\)\{0,1\}\/\{0,1\}\(.*\)$/\1\2\3 \/\4/'
 }
@@ -139,14 +143,28 @@ EOF
 
 fi
 
+if [ "${nginx_buffering}" -eq "0" ]; then
+
+cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
+    charset utf-8;
+    proxy_http_version 1.1;
+    client_max_body_size 0;
+    sendfile on;
+    keepalive_timeout  ${nginx_timeout};
+    proxy_request_buffering off;
+EOF
+
+else
+
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
     charset utf-8;
     client_max_body_size 20M;
     sendfile on;
-    keepalive_timeout  65;
+    keepalive_timeout  ${nginx_timeout};
     large_client_header_buffers 8 32k;
 
 EOF
+fi
 
 # Setup http redirect config
 env | sort | grep "^nginx_html_redirect_" | while IFS="=" read key val; do

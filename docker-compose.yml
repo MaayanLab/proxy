@@ -2,7 +2,7 @@ version: '3'
 services:
   proxy:
     build: .
-    image: maayanlab/proxy:1.1.6
+    image: maayanlab/proxy:1.1.7
     environment:
       # the anticipated name of the server host
       - nginx_server_name=localhost
@@ -41,6 +41,9 @@ services:
 
       # configure timeouts
       # - nginx_timeout=300
+
+      # disable buffering
+      # - nginx_buffering=0
     ports:
       - 80:80
       - 443:443
