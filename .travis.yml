@@ -1,0 +1,3 @@
+services:
+  - docker
+script: sh test.sh
