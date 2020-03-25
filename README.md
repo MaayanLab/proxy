@@ -1,5 +1,7 @@
 # proxy
 
+[![Build Status](https://travis-ci.org/MaayanLab/proxy.svg?branch=master)](https://travis-ci.org/MaayanLab/proxy)
+
 `docker pull maayanlab/proxy`
 
 A convenient and generic proxy image. It's useful for exposing multiple microservices on a single ingress and easily configurable via environment variables.
