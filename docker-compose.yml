@@ -2,17 +2,22 @@ version: '3'
 services:
   proxy:
     build: .
-    image: maayanlab/proxy:1.1.7
+    image: maayanlab/proxy:1.2.0
     environment:
       # the anticipated name of the server host
       - nginx_server_name=localhost
 
       # SSL (when ssl is enabled, http is forwarded to ssl)
       # - nginx_ssl=1
-      # certs in pem format
+
+      # LetsEncrypt for automatic cert verification (also see: volumes)
+      # - nginx_ssl_letsencrypt=1
+      # - letsencrypt_email=your@email.com
+      # - letsencrypt_staging=0
+      # OR certs in pem format
       # - nginx_ssl_key=(replaces ; with \n)
       # - nginx_ssl_crt=(replaces ; with \n)
-      # or provide them in directory:
+      # OR provide them in directory:
       # - nginx_ssl_root=/ssl/directory/
       #  tls.key, tls.crt
 
@@ -45,5 +50,12 @@ services:
       # disable buffering
       # - nginx_buffering=0
     ports:
+      # http port
       - 80:80
-      - 443:443
+      # ssl port
+      # - 443:443
+    # volumes:
+      # /etc/letsencrypt/ should be persistent as it stores your ssl keys
+      # - letsencrypt:/etc/letsencrypt/
+# volumes:
+#   letsencrypt:
