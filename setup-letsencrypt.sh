@@ -2,7 +2,7 @@
 
 rsa_key_size=4096
 
-if [ -d /etc/letsencrypt/live/ ]; then
+if [ -d "/etc/letsencrypt/live/${nginx_server_name}" ]; then
 
 echo "Reusing existing letsencrypt data..." >> $log
 nginx -g "daemon off;" &
