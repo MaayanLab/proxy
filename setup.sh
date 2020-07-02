@@ -75,23 +75,27 @@ if [ "${ret}" -ne "0" ]; then
   exit ${ret}
 fi
 
-if [ "${nginx_ssl_letsencrypt}" -eq "1" -a "$1" == "nginx" ]; then
-  source ./setup-letsencrypt.sh
-  ret="$?"
-  if [ "${ret}" -ne "0" ]; then
-    exit ${ret}
+if [ ! -z "${nginx_ssl_letsencrypt}" ]; then
+  if [ "${nginx_ssl_letsencrypt}" -eq "1" -a "$1" == "nginx" ]; then
+    source ./setup-letsencrypt.sh
+    ret="$?"
+    if [ "${ret}" -ne "0" ]; then
+      exit ${ret}
+    fi
+    echo "Starting letsencrypt renew loop..."
+    trap exit TERM
+    while :; do
+      certbot renew
+      nginx -s reload
+      sleep 12h
+    done &
+    wait ${NGINX_PID}
+  elif [ "${nginx_ssl_letsencrypt}" -eq "1" ]; then
+    echo "Warning: letsencrypt not setup"
+    exec "$@"
+  else
+    exec "$@"
   fi
-  echo "Starting letsencrypt renew loop..."
-  trap exit TERM
-  while :; do
-    certbot renew
-    nginx -s reload
-    sleep 12h
-  done &
-  wait ${NGINX_PID}
-elif [ "${nginx_ssl_letsencrypt}" -eq "1" ]; then
-  echo "Warning: letsencrypt not setup"
-  exec "$@"
 else
   exec "$@"
 fi
