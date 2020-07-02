@@ -15,6 +15,15 @@ services:
       - nginx_redirect_02=/01/02/03(/.*) /01$$1
     ports:
       - 10080:80
+  proxy-auth:
+    build: ..
+    image: maayanlab/proxy:test
+    environment:
+      - nginx_server_name=localhost
+      - nginx_basic_auth=user:pass
+      - nginx_proxy_00=(/(.*)) http://proxy$$1
+    ports:
+      - 10081:80
   test01:
     image: nginx
     volumes:

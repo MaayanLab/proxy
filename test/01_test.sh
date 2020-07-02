@@ -15,6 +15,11 @@ assert() {
   fi
 }
 
+echo "Proxy basic_auth"
+assert "$(curl -so/dev/null http://localhost:10081/ -w '%{http_code}')" "401" "Permission denied expected"
+assert "$(curl -so/dev/null http://user:wrongpass@localhost:10081/ -w '%{http_code}')" "401" "Permission denied expected"
+assert "$(curl -s http://user:pass@localhost:10081/)" "02" "Authenticated, proper content"
+
 echo "Proxy fall through"
 assert "$(curl -s ${TEST_BASE}/)" "02" "Proper content"
 assert "$(curl -s ${TEST_BASE}/01/)" "01" "Proper content"
