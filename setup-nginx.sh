@@ -128,6 +128,20 @@ EOF
 
 fi
 
+if [ "${nginx_basic_auth}" != "" ]; then
+
+mkdir -p /etc/apache2/
+echo "${nginx_basic_auth}" | while IFS=":" read user pass; do
+  htpasswd -b -c /etc/apache2/.htpasswd "${user}" "${pass}"
+done
+
+cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
+  auth_basic "Authentication required";
+  auth_basic_user_file /etc/apache2/.htpasswd;
+EOF
+
+fi
+
 # Setup http redirect config
 env | sort | grep "^nginx_html_redirect_" | while IFS="=" read key val; do
 

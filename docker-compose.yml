@@ -2,10 +2,13 @@ version: '3'
 services:
   proxy:
     build: .
-    image: maayanlab/proxy:1.2.1
+    image: maayanlab/proxy:1.2.2
     environment:
       # the anticipated name of the server host
       - nginx_server_name=localhost
+
+      # HTTP Basic Auth
+      # - nginx_basic_auth=username:password
 
       # SSL (when ssl is enabled, http is forwarded to ssl)
       # - nginx_ssl=1

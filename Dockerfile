@@ -2,7 +2,7 @@ FROM nginx
 
 RUN set -x \
   && apt-get -y update \
-  && apt-get -y install certbot curl \
+  && apt-get -y install certbot curl apache2-utils \
   && rm -rf /var/lib/apt/lists/*
 
 RUN rm /etc/nginx/nginx.conf
