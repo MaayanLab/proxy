@@ -187,8 +187,7 @@ fi
 
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
     location ~ ^${path}$ {
-      rewrite ^${path}$ ${pass};
-      return 302;
+      return 307 ${pass};
     }
 EOF
 
