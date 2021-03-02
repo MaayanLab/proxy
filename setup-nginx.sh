@@ -45,6 +45,8 @@ EOF
 
 fi
 
+if [ "${nginx_ssl_redirect}" -eq "1" ]; then
+
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
 
   server {
@@ -63,26 +65,46 @@ EOF
 
 fi
 
-if [ "${nginx_ssl_redirect}" -eq "1" ]; then
-
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
     location / {
       rewrite ^/(.*)  https://\$host/\$1 permanent;
+    }
+  }
+
+  server {
+    listen          ${nginx_https_port} default_server ssl;
+    server_name     ${nginx_server_name};
+EOF
+
+else
+
+cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
+  server {
+    listen          ${nginx_http_port};
+    server_name     ${nginx_server_name};
+EOF
+
+if [ "${nginx_ssl}" -eq "1" ]; then
+
+cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
+    listen          ${nginx_https_port} default_server ssl;
+EOF
+
+if [ "${nginx_ssl_letsencrypt}" -eq "1" ]; then
+
+cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
+    location /.well-known/acme-challenge/ {
+        root /etc/letsencrypt/certbot;
     }
 EOF
 
 fi
 
+fi
+
+fi
+
 if [ "${nginx_ssl}" -eq "1" ]; then
-
-cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
-  }
-
-  server {
-    listen          ${nginx_https_port} ssl;
-    server_name     ${nginx_server_name};
-
-EOF
 
 if [ "${nginx_ssl_letsencrypt}" -eq "1" ]; then
 
