@@ -82,12 +82,13 @@ cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
     listen          ${nginx_https_port} ssl;
     server_name     ${nginx_server_name};
 
-    include /etc/letsencrypt/options-ssl-nginx.conf;
 EOF
 
 if [ "${nginx_ssl_letsencrypt}" -eq "1" ]; then
 
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
     ssl_certificate ${nginx_ssl_root}/fullchain.pem;
     ssl_certificate_key ${nginx_ssl_root}/privkey.pem;

@@ -18,6 +18,10 @@ if [ -z "${nginx_timeout}" ]; then
   export nginx_timeout="60"
 fi
 
+if [ -z "${nginx_ssl_letsencrypt}" ]; then
+  export nginx_ssl_letsencrypt="0"
+fi
+
 if [ -z "${nginx_ssl}" ]; then
   export nginx_ssl="0"
 elif [ "${nginx_ssl}" -eq "1" ]; then
