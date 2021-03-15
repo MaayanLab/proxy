@@ -213,7 +213,7 @@ cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
       add_header 'Access-Control-Allow-Origin' '*';
       add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
       add_header 'Access-Control-Allow-Headers' 'DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range';
-      return 307 ${pass};
+      return 307 ${pass}\$is_args\$args;
     }
 EOF
 
