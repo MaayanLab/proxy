@@ -67,7 +67,7 @@ fi
 
 cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
     location / {
-      rewrite ^/(.*)  https://\$host/\$1 permanent;
+      rewrite ^/(.*)  https://\$host/\$1\$is_args\$args permanent;
     }
   }
 
