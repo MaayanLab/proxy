@@ -231,6 +231,7 @@ cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
       rewrite ^${path}$ ${uri_back} break;
 
       proxy_pass         ${uri_front};
+      proxy_pass_request_headers  on;
       proxy_set_header   Host \$host;
       proxy_set_header   Connection 'upgrade';
       proxy_set_header   Upgrade \$http_upgrade;
