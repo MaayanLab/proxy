@@ -135,6 +135,7 @@ cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
     client_max_body_size 0;
     sendfile on;
     keepalive_timeout  ${nginx_timeout};
+    proxy_buffering off;
     proxy_request_buffering off;
 EOF
 
