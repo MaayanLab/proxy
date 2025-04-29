@@ -2,7 +2,7 @@ version: '3'
 services:
   proxy:
     build: .
-    image: maayanlab/proxy:1.2.11
+    image: maayanlab/proxy:1.2.12
     platform: linux/amd64
     environment:
       # the anticipated name of the server host
