@@ -243,7 +243,7 @@ cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
       proxy_set_header   X-Forwarded-Host \$server_name;
       proxy_set_header   X-Forwarded-Proto \$scheme;
       proxy_ssl_verify   off;
-      proxy_ssl_name        \$host;
+      proxy_ssl_name        \$http_host;
       proxy_ssl_server_name on;
 
       proxy_connect_timeout ${nginx_timeout};
