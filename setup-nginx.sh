@@ -235,12 +235,12 @@ cat << EOF | tee -a /etc/nginx/nginx.conf >> $log
 
       proxy_pass         ${uri_front};
       proxy_pass_request_headers  on;
-      proxy_set_header   Host \$host;
+      proxy_set_header   Host \$proxy_host;
       proxy_set_header   Connection 'upgrade';
       proxy_set_header   Upgrade \$http_upgrade;
       proxy_set_header   X-Real-IP \$remote_addr;
       proxy_set_header   X-Forwarded-For \$proxy_add_x_forwarded_for;
-      proxy_set_header   X-Forwarded-Host \$server_name;
+      proxy_set_header   X-Forwarded-Host \$host;
       proxy_set_header   X-Forwarded-Proto \$scheme;
       proxy_ssl_verify   off;
       proxy_ssl_name        \$http_host;
